@@ -13,7 +13,7 @@ public class HttpClient {
 
     private HttpURLConnection connection;
 
-    public HttpClient(String urlString, String method, HashMap<String, String> headers){
+    public HttpClient(String urlString, String method, HashMap<String, String> header, HashMap<String, String> body){
         BufferedReader reader;
         String line;
         StringBuffer responseContent = new StringBuffer();
@@ -26,7 +26,7 @@ public class HttpClient {
 
             //request setup:
             connection.setRequestMethod(method);
-            for(Map.Entry<String, String> entry : headers.entrySet()){
+            for(Map.Entry<String, String> entry : header.entrySet()){
                 connection.setRequestProperty(entry.getKey(), entry.getValue());
             }
 

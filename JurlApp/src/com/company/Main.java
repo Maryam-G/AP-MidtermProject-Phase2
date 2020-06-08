@@ -1,10 +1,8 @@
 package com.company;
 
 import javax.swing.*;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Scanner;
-import com.company.*;
+
 import com.company.jurl.Jurl;
 
 public class Main {
