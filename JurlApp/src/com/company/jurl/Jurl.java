@@ -89,27 +89,30 @@ public class Jurl {
                                 setRequestBody();
                             }
 
-                            // --save or -S :
-                            if (findArgument("--save") || findArgument("-S")) {
-                                hasSaveArgument = true;
-                                saveRequest(new Request(urlString, method, requestHeaders, requestBody));
-                            }
+                            if((!(hasMethodArgument && !validMethod)) && (!(hasHeadersArgument && !validHeaders)) && (!(hasDataArguments && !hasDataArguments))){
+                                // --save or -S :
+                                if (findArgument("--save") || findArgument("-S")) {
+                                    hasSaveArgument = true;
+                                    saveRequest(new Request(urlString, method, requestHeaders, requestBody));
+                                }
 
-                            HttpClient httpClient = new HttpClient(urlString, method, requestHeaders, requestBody);
+                                if(!(hasSaveArgument && !saved)){
+                                    HttpClient httpClient = new HttpClient(urlString, method, requestHeaders, requestBody);
 
-                            if(!(hasSaveArgument && !saved)){
-                                printRequestInformation();
-                                System.out.println("\n" + httpClient.getResponseBody());
-                            }
+                                    printRequestInformation();
+                                    System.out.println("\n" + httpClient.getResponseBody());
 
-                            // -i :
-                            if (findArgument("-i")) {
-                                showResponseHeaders(httpClient.getResponseHeaders());
-                            }
+                                    // -i :
+                                    if (findArgument("-i")) {
+                                        showResponseHeaders(httpClient.getResponseHeaders());
+                                    }
 
-                            // --output or -O :
-                            if (findArgument("--output") || findArgument("-O")) {
-                                saveResponseBody(httpClient.getResponseBody());
+                                    // --output or -O :
+                                    if (findArgument("--output") || findArgument("-O")) {
+                                        saveResponseBody(httpClient.getResponseBody());
+                                    }
+                                }
+
                             }
                         }
                     }
