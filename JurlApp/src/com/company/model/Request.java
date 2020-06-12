@@ -18,6 +18,22 @@ public class Request implements Serializable {
         this.requestBody = requestBody;
     }
 
+    public String getUrlString() {
+        return urlString;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public HashMap<String, String> getRequestHeaders() {
+        return requestHeaders;
+    }
+
+    public HashMap<String, String> getRequestBody() {
+        return requestBody;
+    }
+
     @Override
     public String toString() {
         return  " url: " + urlString + " | " +
@@ -26,4 +42,5 @@ public class Request implements Serializable {
                 " body: " + requestBody.toString()
                 ;
     }
+
 }
