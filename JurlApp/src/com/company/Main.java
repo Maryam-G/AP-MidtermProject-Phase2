@@ -1,12 +1,11 @@
 package com.company;
 
-import javax.swing.*;
 import java.util.Scanner;
 
 import com.company.jurl.Jurl;
 
 /**
- * A class for testing JurlApp
+ * A class for testing JurlApp and get input
  *
  * @author Maryam Goli
  */
