@@ -8,12 +8,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A class for establish a connection between client and server
+ *
+ * @author Maryam Goli
+ */
 public class HttpClient {
 
     private HttpURLConnection connection;
     private Map<String, List<String>> responseHeaders;
     private String responseBody;
 
+    /**
+     * constructor method
+     * create URL and establish connection
+     *
+     * @param urlString url-address
+     * @param method method of request
+     * @param header headers of request
+     * @param body body of request
+     */
     public HttpClient(String urlString, String method, HashMap<String, String> header,HashMap<String, String> body){
         try {
             if(!urlString.startsWith("http://")){
@@ -34,12 +48,6 @@ public class HttpClient {
 
             // set body of request for "POST" :
             if(method.equals("POST") || method.equals("PUT") || method.equals("DELETE")){
-//                connection.setDoOutput(true);
-//                DataOutputStream dataOutputStream = new DataOutputStream(connection.getOutputStream());
-//                dataOutputStream.writeChars(bodyString);
-//                dataOutputStream.flush();
-//                dataOutputStream.close();
-
                 String boundary = System.currentTimeMillis() + "";
                 connection.setDoOutput(true);
                 connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
@@ -52,12 +60,6 @@ public class HttpClient {
 
             // response body :
             BufferedReader reader;
-            //todo : pak kardan e ezafiat
-//            if(status / 100 != 2){
-//                reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
-//            }else{
-//                reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-//            }
             if(connection.getErrorStream() != null){
                 reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
             }else{
@@ -69,12 +71,10 @@ public class HttpClient {
                 responseContent.append("\n" + line);
             }
             reader.close();
+            responseBody = responseContent.toString();
 
             //response headers :
             responseHeaders = connection.getHeaderFields();
-
-            //response body :
-            responseBody = responseContent.toString();
 
             connection.disconnect();
 
@@ -85,21 +85,35 @@ public class HttpClient {
         }
     }
 
+    /**
+     * get headers of response
+     * @return responseHeaders field
+     */
     public Map<String, List<String>> getResponseHeaders() {
         return responseHeaders;
     }
 
+    /**
+     * get body of response
+     * @return responseBody field
+     */
     public String getResponseBody() {
         return responseBody;
     }
 
+    /**
+     * set body of requests [Multipart/Form-Data] in method "POST", "PUT", "DELETE"
+     * @param body
+     * @param boundary
+     * @param bufferedOutputStream
+     * @throws IOException
+     */
     public static void formData(HashMap<String, String> body, String boundary, BufferedOutputStream bufferedOutputStream) throws IOException {
         for (String key : body.keySet()) {
             bufferedOutputStream.write(("--" + boundary + "\r\n").getBytes());
             if (key.contains("file")) {
                 bufferedOutputStream.write(("Content-Disposition: form-data; filename=\"" + (new File(body.get(key))).getName() + "\"\r\nContent-Type: Auto\r\n\r\n").getBytes());
                 try {
-                    // TODO : in code ro avaz karadm...
                     File file = new File(body.get(key));
                     BufferedInputStream tempBufferedInputStream = new BufferedInputStream(new FileInputStream(file));
                     int size = (int) file.length();

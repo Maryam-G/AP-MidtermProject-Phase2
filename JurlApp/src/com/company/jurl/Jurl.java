@@ -8,8 +8,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A class for managing requests and responses
+ *
+ * @author Maryam Goli
+ */
 public class Jurl {
-    //TODO : age url ro eshtebah bede
 
     private String input;
     private String[] partsOfInput;
@@ -26,6 +30,10 @@ public class Jurl {
     private boolean hasHeadersArgument, validHeaders;
     private boolean hasDataArguments, validData;
 
+    /**
+     * constructor method
+     * @param newInput input
+     */
     public Jurl(String newInput){
         input = newInput;
         partsOfInput = input.split(" ");
@@ -45,6 +53,10 @@ public class Jurl {
         checkRequest();
     }
 
+    /**
+     * check arguments and parts of input
+     * create a new HttpClient for connection and sending request
+     */
     public void checkRequest(){
         if(input.toLowerCase().startsWith(">jurl")){
             if(partsOfInput.length > 1){
@@ -53,7 +65,6 @@ public class Jurl {
                 }else if(partsOfInput[1].toLowerCase().equals("list")){
                     showList();
                 }else if(partsOfInput[1].toLowerCase().equals("fire")){
-                    // TODO : fire
                     fire();
                 }else{
                     //--help or -h :
@@ -64,7 +75,6 @@ public class Jurl {
                         if (findArgument("--url")) {
                             setUrlString();
                         } else {
-                            //TODO : err or exception
                             System.err.println("No URL!");
                         }
 
@@ -116,15 +126,16 @@ public class Jurl {
                     }
                 }
             }else{
-                //TODO : err or exception
                 System.err.println("Input for >jurl ?!");
             }
         }else{
-            //TODO : err or exception
             System.err.println("Invalid statement!");
         }
     }
 
+    /**
+     * set url string
+     */
     public void setUrlString(){
         // when input contains argument "--url"
         int index = indexOfString("--url") + 1;
@@ -136,6 +147,9 @@ public class Jurl {
         }
     }
 
+    /**
+     * set method of request
+     */
     public void setMethod(){
         // when input contains argument "--method" or "-M"
         int index;
@@ -146,19 +160,19 @@ public class Jurl {
         if(index >= partsOfInput.length || partsOfInput[index].startsWith("-")){
             System.err.println("Unwritten method! -> --method [...]");
         }else{
-            //TODO : PATCH hast ya na
             String currentMethod = partsOfInput[index].toUpperCase();
-            if(currentMethod.equals("GET") || currentMethod.equals("POST") || currentMethod.equals("PUT") || currentMethod.equals("DELETE") || currentMethod.equals("PATCH")){
+            if(currentMethod.equals("GET") || currentMethod.equals("POST") || currentMethod.equals("PUT") || currentMethod.equals("DELETE")){
                 method = partsOfInput[index].toUpperCase();
                 validMethod = true;
             }else{
-                //todo: patch hast ya na
-                System.err.println("Invalid request method! (valid methods: GET, POST, PUT, DELETE, PATCH)");
-                //TODO : Exception or System.err ???
+                System.err.println("Invalid request method! (valid methods: GET, POST, PUT, DELETE)");
             }
         }
     }
 
+    /**
+     * set headers of request
+     */
     public void setRequestHeaders(){
         // when input contains "--headers" or "-H"
 
@@ -172,14 +186,10 @@ public class Jurl {
             System.err.println("Unwritten headers! -> --headers [\"...\"]");
         }else{
             String headersString = partsOfInput[index].substring(1, partsOfInput[index].length()-1);
-            //TODO : header ha ba ";" az ham goda mishan ya "&" ???
-            //TODO : handel kardan e khata
             String[] allHeaders = headersString.split(";");
             String key, value;
             ArrayList<Boolean> booleanValues = new ArrayList<>();
             for(String currentHeader : allHeaders){
-                //TODO : key , value ha ba ":" az ham goda mishan ya "=" ???
-                //TODO : handel kardan e khata
                 if(currentHeader.split(":").length == 2){
                     key = currentHeader.split(":")[0];
                     value = currentHeader.split(":")[1];
@@ -188,13 +198,10 @@ public class Jurl {
                         requestHeaders.put(key, value);
                         booleanValues.add(true);
                     }else{
-                        //TODO : Exception or system.err ???
                         System.err.println("Null key or null value in request headers!");
                         booleanValues.add(false);
                     }
                 }else{
-                    //todo :
-                    //TODO : Exception or system.err ???
                     System.err.println("Null key or null value in request headers!");
                     booleanValues.add(false);
                 }
@@ -215,6 +222,9 @@ public class Jurl {
         }
     }
 
+    /**
+     * set body of request
+     */
     public void setRequestBody(){
         // when input contains "--data" or "-d"
 
@@ -228,14 +238,10 @@ public class Jurl {
             System.err.println("Unwritten body! -> --data [\"...\"]");
         }else{
             String bodyStr = partsOfInput[index].substring(1, partsOfInput[index].length()-1);
-            //TODO : header ha ba ";" az ham goda mishan ya "&" ???
-            //TODO : handel kardan e khata
             String[] partsOfBody = bodyStr.split("&");
             String key, value;
             ArrayList<Boolean> booleanValues = new ArrayList<>();
             for(String currentPart : partsOfBody){
-                //TODO : key , value ha ba ":" az ham goda mishan ya "=" ???
-                //TODO : handel kardan e khata
                 if(currentPart.split("=").length == 2){
                     key = currentPart.split("=")[0];
                     value = currentPart.split("=")[1];
@@ -244,12 +250,10 @@ public class Jurl {
                         requestBody.put(key, value);
                         booleanValues.add(true);
                     }else{
-                        //TODO : Exception or system.err ???
                         System.err.println("Null key or null value in request body!");
                         booleanValues.add(false);
                     }
                 }else{
-                    //TODO : Exception or system.err ???
                     System.err.println("Null key or null value in request body!");
                     booleanValues.add(false);
                 }
@@ -270,6 +274,10 @@ public class Jurl {
         }
     }
 
+    /**
+     * show headers of response
+     * @param responseHeaders headers of response
+     */
     public void showResponseHeaders(Map<String, List<String>> responseHeaders){
         // when input contains argument "-i"
         System.out.println("\n");
@@ -286,6 +294,10 @@ public class Jurl {
         }
     }
 
+    /**
+     * save body of response in a file
+     * @param responseBody body of response
+     */
     public void saveResponseBody(String responseBody){
         // when input contains argument "--output" or "-O"
         int index;
@@ -307,6 +319,9 @@ public class Jurl {
         System.out.println("\u2192 Response body saved in file ...");
     }
 
+    /**
+     * print list of statements and arguments in JurlApp
+     */
     public void printHelpList (){
         System.out.println(
                 "\u25B7 List of statements : " + "\n" +
@@ -317,19 +332,19 @@ public class Jurl {
                 "   \u25B8 >jurl fire [...] [...]    => resend saved requests                                                  ([...]-1 -> collection name , [...]-2 -> the numbers of saved requests)" + "\n" +
                 "\u25B7 List of arguments : " + "\n" +
                 "   \u25B8 --url [...]               => set URL of request                                                     ([...] -> url address)" + "\n" +
-                //TODO : PATCH hst ya na ???
-                "   \u25B8 -M or --methods [...]     => set method of request                                                  ([...] -> GET[by-default] - PUT - POST - DELETE - PATCH )" + "\n" +
-                //TODO : goda kardan e header ha ba ";" ya "&" ???
+                "   \u25B8 -M or --methods [...]     => set method of request                                                  ([...] -> GET[by-default] - PUT - POST - DELETE)" + "\n" +
                 "   \u25B8 -H or --headers [...]     => set headers of request with \":\" and \";\"                                ([...] -> for example : \"key1:value1;key2:value2\" )" + "\n" +
-                //TODO : "=" ya ":" -- ";" ya "&" ???
                 "   \u25B8 -d or --data [...]        => set body [Form-data] of request with \"=\" and \"&\"                       ([...] -> for example : \"key1=value1&key2=value2\" )" + "\n" +
                 "   \u25B8 -S or --save [...]        => save request (URL-method-headers-body) in selected collection          ([...] -> name of collection )" + "\n" +
                 "   \u25B8 -i                        => showing headers of response" + "\n" +
                 "   \u25B8 -O or --output ~[...]     => save response body in file                                             ([...] -> name of file [\"~\" means optional] )" + "\n"
-                //TODO : kamel kardan e list
         );
     }
 
+    /**
+     * save request in a file
+     * @param newRequest new request
+     */
     public void saveRequest(Request newRequest){
         // when input contains argument "--save" or "-S"
         int index;
@@ -340,7 +355,6 @@ public class Jurl {
 
         // save request in one collection (name of this collection is in partsOfInput[index])
         if(index >= partsOfInput.length){
-            //TODO : Exception or System.err
             System.err.println("Saving request in which collection?!");
         }else{
             String collectionName = partsOfInput[index];
@@ -348,12 +362,16 @@ public class Jurl {
                 FileUtils.writeRequestInFile(newRequest, collectionName);
                 saved = true;
             }else{
-                //TODO : Exception or System.err
                 System.err.println("Invalid name for directory!");
             }
         }
     }
 
+    /**
+     * show list of all collections
+     * or
+     * show list of all requests in one collection
+     */
     public void showList(){
         // when input is ">jurl list" or ">jurl list listName"
         if(partsOfInput.length == 2){
@@ -384,28 +402,30 @@ public class Jurl {
                     count++;
                 }
             }else{
-                //TODO : Exception or System.err
                 System.err.println("Invalid name for directory!");
             }
         }
     }
 
+    /**
+     * create new collection
+     */
     public void createCollection(){
         // >jurl create newCollection
         if(partsOfInput.length == 3){
             FileUtils.createNewCollection(partsOfInput[2]);
         }else{
-            //TODO : err or exception
             System.err.println("Invalid name for new collection!");
         }
     }
 
+    /**
+     * resend saved requests
+     */
     public void fire(){
         if(partsOfInput.length == 2){ // >jurl fire
-            //TODO : Exception or System.err
             System.err.println("Name of collection?!");
         }else if(partsOfInput.length == 3){ // >jurl fire collectionName
-            //TODO : Exception or System.err
             System.err.println("Request number in collection?!");
         }else if(partsOfInput.length > 3){
             String collectionName = partsOfInput[2];
@@ -421,23 +441,23 @@ public class Jurl {
                     if((currentNumber >= 1) && (currentNumber <= requestsInCollection.size())){
                         Request currentRequest = requestsInCollection.get(currentNumber - 1);
                         HttpClient newHttpClient = new HttpClient(currentRequest.getUrlString(), currentRequest.getMethod(), currentRequest.getRequestHeaders(), currentRequest.getRequestBody());
-                        //TODO : print request and response ...
 
                         System.out.println("\n\n" + "\u25CF Collection " + collectionName + " - Request " + currentNumber + " => " + currentRequest.toString());
                         showResponseHeaders(newHttpClient.getResponseHeaders());
                         System.out.println("\n" + newHttpClient.getResponseBody());
                     }else{
-                        //TODO : Exception or System.err
                         System.err.println("Invalid number for request in collection!");
                     }
                 }
             }else{
-                //TODO : Exception or System.err
                 System.err.println("Invalid name for collection!");
             }
         }
     }
 
+    /**
+     * print information about request
+     */
     public void printRequestInformation(){
         // method :
         if(hasMethodArgument && validMethod){
@@ -466,6 +486,11 @@ public class Jurl {
         }
     }
 
+    /**
+     * return index of string in parts of input
+     * @param string
+     * @return index of string
+     */
     public int indexOfString (String string){
         int index = 0;
         for(String s : partsOfInput){
@@ -477,6 +502,11 @@ public class Jurl {
         return -1;
     }
 
+    /**
+     * find argument in input
+     * @param argument an argument (starts with - or --)
+     * @return true or false
+     */
     public boolean findArgument(String argument){
         for(String currentString : partsOfInput){
             if(currentString.equals(argument)){
