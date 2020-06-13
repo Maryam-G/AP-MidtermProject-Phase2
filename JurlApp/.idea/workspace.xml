@@ -35,6 +35,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
@@ -72,6 +73,7 @@
       <workItem from="1591311622824" duration="23924000" />
       <workItem from="1591749413045" duration="30495000" />
       <workItem from="1591937435103" duration="13676000" />
+      <workItem from="1592006812827" duration="609000" />
     </task>
     <servers />
   </component>

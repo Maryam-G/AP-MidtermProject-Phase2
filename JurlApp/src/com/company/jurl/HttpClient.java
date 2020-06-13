@@ -1,4 +1,4 @@
-package com.company.httpClient;
+package com.company.jurl;
 
 import java.io.*;
 import java.net.HttpURLConnection;

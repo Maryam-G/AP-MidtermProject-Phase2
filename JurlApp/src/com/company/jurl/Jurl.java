@@ -1,10 +1,8 @@
 package com.company.jurl;
 
-import com.company.httpClient.HttpClient;
 import com.company.model.Request;
 import com.company.utils.FileUtils;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
